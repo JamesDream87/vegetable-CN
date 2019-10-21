@@ -12,7 +12,7 @@ def getHTML(url):
 
 def To_CSV(id, name):
   df = {
-    "id": id,
+    "ID": id,
     "name": name,
   }
   df = pd.DataFrame(df)
