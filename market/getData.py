@@ -16,7 +16,13 @@ def read_csv():
 
 def get_json():
   df,res = read_csv()
-  print(df)
+  if(res == True):
+    df_json = df.to_json(orient = 'records', force_ascii = False)
+    fo = open("./dataset/market.json", "w", encoding='utf-8')
+    fo.write(df_json)
+  else:
+    print('have not data')
+
 
 def get_id_list():
   df,res = read_csv()
