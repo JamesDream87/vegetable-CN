@@ -23,7 +23,7 @@ def loop(List):
     if(len(Vname)<=0):
       print('本市场ID没有数据')
       MarketNull.append(each)
-
+      continue
     else:
       # 返回清理的参数
       date,mark,name,low,high = ClearData(Vdate,Vmarket,Vname,Vlow,Vhigh)
