@@ -16,14 +16,29 @@ def loop(List):
 
   for each in List:
     url = init(each, year, month, day)
-    getHtml(url)
+    # 爬取网页信息返回未清理的参数
+    Vdata,Vmarket,Vname,Vlow,Vhigh = getHtml(url)
+    # 返回清理的参数
+    date,mark,name,low,high = ClearData(Vdata,Vmarket,Vname,Vlow,Vhigh)
+    # 转为csv
+    df = {
+      "日期": date,
+      "市场名称": mark,
+      "蔬菜名": name,
+      "最低价": low,
+      "最高价": high
+    }
+    df = pd.DataFrame(df)
+    df.to_csv(f'./dataset/price-{each}-{year}{month}{day}.csv',index=False)
 
 #获取是否含有多页数据
 def getHtml(url):
   page=requests.Session().get(url) 
   soup=html.fromstring(page.text)
   Vdata,Vmarket,Vname,Vlow,Vhigh = setData(soup)
+  # 获取是否有下一页信息
   next = is_next(soup)
+  # 如果存在下一页信息
   if(len(next) > 0):
     for each in next:
       page=requests.Session().get(f'http://www.vegnet.com.cn/{each}') 
@@ -35,8 +50,10 @@ def getHtml(url):
       Vlow.extend(Dlow)
       Vhigh.extend(Dhigh)
   
+  #将数据整理为一定的格式
+  return Vdata,Vmarket,Vname,Vlow,Vhigh
 
-
+# 筛选出数据
 def setData(soup):
   Vdata = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_1"]/text()')
   Vmarket = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_3"]//a/text()')
@@ -46,7 +63,34 @@ def setData(soup):
 
   return Vdata,Vmarket,Vname,Vlow,Vhigh
 
+def ClearData(Vdata,Vmarket,Vname,Vlow,Vhigh):
+  date = []
+  high = []
+  low = []
+  mark = []
+  name = []
 
+  for each in Vdata:
+    each = each.__str__()
+    each = each.strip('[')
+    each = each.strip(']')
+    date.append(each)
+
+  for each in Vmarket:
+    mark.append(each)
+  
+  for each in Vname:
+    name.append(each)
+
+  for each in Vlow:
+    each = each.strip('¥')
+    low.append(each)
+
+  for each in Vhigh:
+    each = each.strip('¥')
+    high.append(each)
+
+  return date,mark,name,low,high
 
 # 获取是否有下一页
 def is_next(soup):
