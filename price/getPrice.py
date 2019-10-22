@@ -16,14 +16,36 @@ def loop(List):
 
   for each in List:
     url = init(each, year, month, day)
-    print(url)
+    getHtml(url)
 
 #获取是否含有多页数据
 def getHtml(url):
   page=requests.Session().get(url) 
-  tree=html.fromstring(page.text)
-  next = is_next(tree)
-  print(next)
+  soup=html.fromstring(page.text)
+  Vdata,Vmarket,Vname,Vlow,Vhigh = setData(soup)
+  next = is_next(soup)
+  if(len(next) > 0):
+    for each in next:
+      page=requests.Session().get(f'http://www.vegnet.com.cn/{each}') 
+      soup=html.fromstring(page.text)
+      Ddata,Dmarket,Dname,Dlow,Dhigh = setData(soup)
+      Vdata.extend(Ddata)
+      Vmarket.extend(Dmarket)
+      Vname.extend(Dname)
+      Vlow.extend(Dlow)
+      Vhigh.extend(Dhigh)
+  
+
+
+def setData(soup):
+  Vdata = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_1"]/text()')
+  Vmarket = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_3"]//a/text()')
+  Vname = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_2"][1]/text()')
+  Vlow = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_2"][2]/text()')
+  Vhigh = soup.xpath('//div[@class="pri_k"]//p//span[@class="k_2"][3]/text()')
+
+  return Vdata,Vmarket,Vname,Vlow,Vhigh
+
 
 
 # 获取是否有下一页
