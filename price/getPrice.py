@@ -23,25 +23,15 @@ def loop(List):
     if(len(Vname)<=0):
       print('本市场ID没有数据')
       MarketNull.append(each)
-      df = {
-        "MarketId": MarketNull
-      }
-      df = pd.DataFrame(df)
-      df.to_csv(f'./dataset/MarketNULL.csv',index=False)
 
     else:
       # 返回清理的参数
       date,mark,name,low,high = ClearData(Vdate,Vmarket,Vname,Vlow,Vhigh)
       # 转为csv
-      df = {
-        "日期": date,
-        "市场名称": mark,
-        "蔬菜名": name,
-        "最低价": low,
-        "最高价": high
-      }
-      df = pd.DataFrame(df)
-      df.to_csv(f'./dataset/price-{each}-{year}{month}{day}.csv',index=False)
+      to_price_csv(date,mark,name,low,high,year,month,day,each)
+
+  # 输出没有数据的市场列表
+  NoneDataMarket(MarketNull)
 
 #获取是否含有多页数据
 def getHtml(url):
@@ -118,3 +108,21 @@ def is_next(soup):
       next.append(href[each])
   
   return next
+
+def to_price_csv(date,mark,name,low,high,year,month,day,each):
+  df = {
+    "日期": date,
+    "市场名称": mark,
+    "蔬菜名": name,
+    "最低价": low,
+    "最高价": high
+  }
+  df = pd.DataFrame(df)
+  df.to_csv(f'./dataset/price-{each}-{year}{month}{day}.csv',index=False)
+
+def NoneDataMarket(MarketNull):
+  df = {
+    "MarketId": MarketNull
+  }
+  df = pd.DataFrame(df)
+  df.to_csv(f'./dataset/MarketNULL.csv',index=False)
