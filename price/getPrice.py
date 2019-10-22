@@ -6,6 +6,7 @@ import datetime
 # 初始化链接
 def init(market, year, month, day):
   url = f'http://www.vegnet.com.cn/Price/List?marketID={market}&year={year}&month={month}&day={day}'
+  print(f'正在执行MarketId:{market}')
   return url
 
 # 传入市场id，进行循环操作初始化
@@ -40,6 +41,7 @@ def getHtml(url):
   next = is_next(soup)
   # 如果存在下一页信息
   if(len(next) > 0):
+    print('发现分页内容，正在检索')
     for each in next:
       page=requests.Session().get(f'http://www.vegnet.com.cn/{each}') 
       soup=html.fromstring(page.text)
