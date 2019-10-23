@@ -40,4 +40,4 @@ def run():
     print(f'id:{id}')
     id += 1
 
-  To_CSV(idList, name)
+  return idList, name
