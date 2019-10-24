@@ -6,6 +6,7 @@
     pip install pandas
     pip install lxml
     pip install requests
+    pip install sqlalchemy
     pip install pymysql
   ```
 
