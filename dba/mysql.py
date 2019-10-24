@@ -10,11 +10,22 @@ def insert_price(config, df):
   # 将df数据插入数据库
   df.to_sql(name='price', con = con, if_exists = 'append', index=False)
 
-def select_price_name(config, name):
-  print(name)
+def select_price_name(config, Pname, Pdate):
+  engine = init_connect(config)
+  Base = declarative_base(engine)
+  session = sessionmaker(engine)()
 
-def select_price_date(config, date):
-  print(date)
+  class Price(Base):
+    __tablename__ = 'price'
+    id = Column(Integer , primary_key=True , autoincrement=True)
+    date = Column(DateTime)
+    market_name = Column(String(64))
+    vegetable = Column(String(64))
+    low = Column(Float)
+    high = Column(Float)
+
+  db_data = session.query(Price).filter(Price.name.like(f'%{Pname}%')).filter(Price.date == Pdate).all()
+  return db_data
 
 def insert_market(config, df):
   # 创建数据库连接
