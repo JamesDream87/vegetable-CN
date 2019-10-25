@@ -29,7 +29,7 @@ def select_market():
 def insert_price():
   year = datetime.datetime.now().year
   month = datetime.datetime.now().month
-  day = 24
+  day = datetime.datetime.now().day - 1
   MarketNull = []
   List = gd.get_id_list()
   for each in List:
