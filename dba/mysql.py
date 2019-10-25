@@ -10,7 +10,7 @@ def insert_price(config, df):
   # 将df数据插入数据库
   df.to_sql(name='price', con = con, if_exists = 'append', index=False)
 
-def select_price_name(config, Pname, Pdate):
+def select_price(config, Pname, Pdate):
   engine = init_connect(config)
   Base = declarative_base(engine)
   session = sessionmaker(engine)()
@@ -24,7 +24,7 @@ def select_price_name(config, Pname, Pdate):
     low = Column(Float)
     high = Column(Float)
 
-  db_data = session.query(Price).filter(Price.name.like(f'%{Pname}%')).filter(Price.date == Pdate).all()
+  db_data = session.query(Price).filter(Price.vegetable.like(f'%{Pname}%')).filter(Price.date == Pdate).all()
   return db_data
 
 def insert_market(config, df):
@@ -61,6 +61,13 @@ def select_null_market(config):
 
   db_data = session.query(Market).filter().all()
   return db_data
+
+def insert_null_market(config, df):
+  # 创建数据库连接
+  engine = init_connect(config)
+  con = engine.connect()
+  # 将df数据插入数据库
+  df.to_sql(name='market_null', con = con, if_exists = 'append', index=False)
 
 def init_connect(config):
   USERNAME = config['user']
