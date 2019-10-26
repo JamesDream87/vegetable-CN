@@ -1,7 +1,9 @@
-# Vegetable-CN project
-  Vegetable-CN project.
+# 关于本项目
+  中国蔬菜价格行情获取与分析工具
 
-## Library
+  [ENGLISH Version](ReadMe_EN.md)
+
+## 使用到的库
   ```
     pip install pandas
     pip install lxml
@@ -10,10 +12,9 @@
     pip install pymysql
   ```
 
-## Use the SQL
-  If you want to use the SQL,create the settings folder in the root folder.
-  And you must create a config.py in your settings folder.
-  this's the format about config.py .
+## 关于SQL功能
+  如果您需要使用到SQL功能，请在根目录内创建一个settings目录，然后创建
+  一个config.py文件在settings目录内，按照以下格式填入您的MySQL信息。
   ```
     config ={     
       'host': 'your host',       
@@ -23,3 +24,8 @@
       'database': 'your db name'
     }
   ```
+
+# 更新计划
+  1.完善Analyze 分析模块
+  2.完善dba 数据模块，实现更多的数据库使用方式
+  3.完善文档
