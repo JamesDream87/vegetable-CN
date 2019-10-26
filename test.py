@@ -58,7 +58,7 @@ def insert_price():
       ms.insert_price(config.config, df)
   
   # 将没有数据的ID对应名称后存入数据库
-  insert_NULL_Market(MarketNull)
+  #insert_NULL_Market(MarketNull)
 
 # 插入空数据的Market
 def insert_NULL_Market(MarketNull):
@@ -83,4 +83,28 @@ def select_vege_price(name, date):
   for each in data:
     print(f'市场名：{each.market_name},最低价:{each.low},最高价：{each.high}')
 
-select_vege_price('西红柿','2019-10-24')
+def delete_null_market():
+  temp_id = []
+  have_id = []
+  null = ms.select_null_market(config.config)
+  for each in null:
+    temp_id.append(each.market_id)
+  
+  market_id = gd.get_id_list()
+  # 差集
+  have_id = list(set(market_id).difference(set(temp_id)))
+  have_name = []
+  market_name = gd.get_json()
+  for each in market_name:
+    for j in have_id:
+      if(j == each['ID']):
+        have_name.append(each['name'])
+
+  df = {
+    "ID": have_id,
+    "name": have_name,
+  }
+  df = pd.DataFrame(df)
+  df.to_csv('dataset/market.csv',index=False)
+
+delete_null_market()
