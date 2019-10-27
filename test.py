@@ -105,6 +105,6 @@ def delete_null_market():
     "name": have_name,
   }
   df = pd.DataFrame(df)
-  df.to_csv('dataset/market.csv',index=False)
+  df.to_csv('dataset/market.csv',index=True)
 
-delete_null_market()
+insert_price()
