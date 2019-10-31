@@ -5,6 +5,7 @@ from dba import mysql as ms
 from settings import config
 import pandas as pd
 import datetime
+import time
 
 # 插入市场信息
 def insert_market():
@@ -56,6 +57,7 @@ def insert_price():
       df = pd.DataFrame(df)
       # print(df)
       ms.insert_price(config.config, df)
+      time.sleep(1)
   
   # 将没有数据的ID对应名称后存入数据库
   #insert_NULL_Market(MarketNull)
