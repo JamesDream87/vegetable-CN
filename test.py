@@ -28,9 +28,7 @@ def select_market():
 
 # 插入市场价格信息
 def insert_price():
-  year = datetime.datetime.now().year
-  month = datetime.datetime.now().month
-  day = datetime.datetime.now().day - 1
+  year,month,day = CountDay()
   MarketNull = []
   List = gd.get_id_list()
   for each in List:
@@ -108,5 +106,14 @@ def delete_null_market():
   }
   df = pd.DataFrame(df)
   df.to_csv('dataset/market.csv',index=True)
+
+def CountDay():
+  today = datetime.date.today()
+  yesterday = today - datetime.timedelta(1)
+  yesterday = yesterday.__str__().split('-')
+  year = yesterday[0]
+  month = yesterday[1]
+  day = yesterday[2]
+  return year,month,day
 
 insert_price()
